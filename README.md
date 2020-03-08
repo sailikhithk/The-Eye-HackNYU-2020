@@ -14,13 +14,13 @@ Our application is of two parts as of now:
 Part 1: Speech recognition for browser navigation
 Part 2: OCR implementation to help visually impaired get the text from data.
 
-# Part1 : Speech Recognition for application navigation:
+### Part1 : Speech Recognition for application navigation:
 Since, it's very difficult for visulaly challenged people to operate computers, we developed the built-in speech recognition for our application which would help the user to navigate through our application.
 
-# Part2: OCR implementation and text to speech conversion:
+### Part2: OCR implementation and text to speech conversion:
 This technology would help the specially aided people by reading out loud the things theuy
 
-## Instructions to setup
+### Instructions to setup
 
 ```
 1. virualenv venv
@@ -28,12 +28,13 @@ This technology would help the specially aided people by reading out loud the th
 3. pip install -r requirements.txt
 4. python app.py
 5. go to http://localhost:8000
-``
+```
 
-## Author
+### Author
+
 ```
 Harshul Jain
-Tanya Sah
 Sai Likhith
+Tanya Sah
 Darren
 ```
