@@ -13,7 +13,7 @@
 	</style>
 </head>
 <body>
-	<div id="results">Your captured image will appear here...</div>
+	<div id="results">Your captured text will appear in console ...</div>
 	
 	<h1>WebcamJS Test Page</h1>
 	<h3>Demonstrates simple 320x240 capture &amp; display</h3>
@@ -37,28 +37,32 @@
 	
 	<!-- Code to handle taking the snapshot and displaying it locally -->
 	<script language="JavaScript">
-		setInterval(take_snapshot, 5000);
-		
+		var prev = "";
+		setInterval(take_snapshot, 3000);
+		function myFunction(str)
+							{
+        var synth = window.speechSynthesis;
+        var utterThis = new SpeechSynthesisUtterance(str);
+        synth.speak(utterThis);
+      }
 		function take_snapshot() {
 			// take snapshot and get image data
 			Webcam.snap( function(data_uri) {
 				// display results in page
-                    $.ajax({
+				try{	
+				$.ajax({
                         type: 'POST',
                         url: '/uploadajax',
                         data: {'data_uri': data_uri},
                         dataType: "json",
-                        success: function(res) {
-							console.log(res);
+						success: function(res) {
 							var filename = res['filename'];
-                            setInterval(fetchdetails,5000, filename);
-                        },
-					});
-				} );
-
-
-				
+							setInterval(fetchdetails,3000, filename)}},
+                        )}
+					catch(err){}
+			})
 		}
+		
 
 		 function fetchdetails(filename){
                 var data = {'filename':filename}
@@ -68,10 +72,15 @@
                 data: data,
                 dataType: "json",
                 success: function(response){
-                    console.log(response);
                     // Perform operation on the return value
                     if(response!=""){
-						console.log(response['text']);
+						var current_text = response['text'];
+						if (current_text!=prev){
+							prev = current_text;
+							console.log(prev);
+							myFunction(prev);
+							
+						}
 						clearInterval(fetchdetails);
 					}
                 }

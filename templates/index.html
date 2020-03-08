@@ -1,55 +1,842 @@
+<!DOCTYPE HTML>
+<!--
+	Typify by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
 <html>
-    <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    </head>
-    <body>
-        <form id="upload-file" method="post" enctype="multipart/form-data">
-            <fieldset>
-                <label for="file">Select a file</label>
-                <input name="file" type="file">
-            </fieldset>
-            <fieldset>
-                <button id="upload-file-btn" type="button">Upload</button>
-            </fieldset>
-        </form>
-        
-        <script>
-            $(function() {
-                $('#upload-file-btn').click(function() {
-                    var form_data = new FormData($('#upload-file')[0]);
-                    $.ajax({
-                        type: 'POST',
-                        url: '/uploadajax',
-                        data: form_data,
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        success: function(filename) {
-                            console.log(filename);
-                            setInterval(fetchdetails,1000, filename);
-                        },
-                    });
-                });
-            });
+<head>
+	<title>Typify by TEMPLATED</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+
+</head>
+
+<body>
+
+	<!-- Banner -->
+	<section id="banner">
+		<h2><strong>Typify</strong> is a free responsive site template</h2>
+		<p>Brought to you by Templated</p>
+		<ul class="actions">
+			<li><a href="#" class="button special">Get started</a></li>
+		</ul>
+	</section>
+
+	<!-- One -->
+	<section id="one" class="wrapper special">
+		<div class="inner">
+			<header class="major">
+				<h2>Lorem ipsum feugiat tempus</h2>
+			</header>
 
 
-            function fetchdetails(filename){
-                var data = {'filename':filename}
-                $.ajax({
-                url: '/fetchdetails',
-                type: 'post',
-                data: data,
-                dataType: "json",
-                success: function(response){
-                    console.log(response);
-                    // Perform operation on the return value
-                    if(response!=""){alert(response['text']);}
-                }
-                });
-                }
-            </script>
-        
-    </body>
-    
+			<h1 class="center" id="headline">
+				<a href="http://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html">
+					Web Speech API</a> Demonstration</h1>
+			<div id="info">
+				<p id="info_start">Click on the microphone icon and begin speaking.</p>
+				<p id="info_speak_now">Speak now.</p>
+				<p id="info_no_speech">No speech was detected. You may need to adjust your
+					<a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+						microphone settings</a>.</p>
+				<p id="info_no_microphone" style="display:none">
+					No microphone was found. Ensure that a microphone is installed and that
+					<a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+						microphone settings</a> are configured correctly.</p>
+				<p id="info_allow">Click the "Allow" button above to enable your microphone.</p>
+				<p id="info_denied">Permission to use microphone was denied.</p>
+				<p id="info_blocked">Permission to use microphone is blocked. To change,
+					go to chrome://settings/contentExceptions#media-stream</p>
+				<p id="info_upgrade">Web Speech API is not supported by this browser.
+					Upgrade to <a href="//www.google.com/chrome">Chrome</a>
+					version 25 or later.</p>
+			</div>
+			<div class="right">
+				<button id="start_button" onclick="startButton(event)">
+					<img id="start_img" src="mic.gif" alt="Start"></button>
+			</div>
+			<div id="results">
+				<span id="final_span" class="final"></span>
+				<span id="interim_span" class="interim"></span>
+				<p>
+			</div>
+			<div class="center">
+				<div class="sidebyside" style="text-align:right">
+					<button id="copy_button" class="button" onclick="copyButton()">
+						Copy and Paste</button>
+					<div id="copy_info" class="info">
+						Press Control-C to copy text.<br>(Command-C on Mac.)
+					</div>
+				</div>
+				<div class="sidebyside">
+					<button id="email_button" class="button" onclick="emailButton()">
+						Create Email</button>
+					<div id="email_info" class="info">
+						Text sent to default email application.<br>
+						(See chrome://settings/handlers to change.)
+					</div>
+				</div>
+				<p>
+					<div id="div_language">
+						<select id="select_language" onchange="updateCountry()"></select>
+						&nbsp;&nbsp;
+						<select id="select_dialect"></select>
+					</div>
+			</div>
+			<script>
+				var langs =
+					[['Afrikaans', ['af-ZA']],
+					['Bahasa Indonesia', ['id-ID']],
+					['Bahasa Melayu', ['ms-MY']],
+					['Català', ['ca-ES']],
+					['Čeština', ['cs-CZ']],
+					['Deutsch', ['de-DE']],
+					['English', ['en-AU', 'Australia'],
+						['en-CA', 'Canada'],
+						['en-IN', 'India'],
+						['en-NZ', 'New Zealand'],
+						['en-ZA', 'South Africa'],
+						['en-GB', 'United Kingdom'],
+						['en-US', 'United States']],
+					['Español', ['es-AR', 'Argentina'],
+						['es-BO', 'Bolivia'],
+						['es-CL', 'Chile'],
+						['es-CO', 'Colombia'],
+						['es-CR', 'Costa Rica'],
+						['es-EC', 'Ecuador'],
+						['es-SV', 'El Salvador'],
+						['es-ES', 'España'],
+						['es-US', 'Estados Unidos'],
+						['es-GT', 'Guatemala'],
+						['es-HN', 'Honduras'],
+						['es-MX', 'México'],
+						['es-NI', 'Nicaragua'],
+						['es-PA', 'Panamá'],
+						['es-PY', 'Paraguay'],
+						['es-PE', 'Perú'],
+						['es-PR', 'Puerto Rico'],
+						['es-DO', 'República Dominicana'],
+						['es-UY', 'Uruguay'],
+						['es-VE', 'Venezuela']],
+					['Euskara', ['eu-ES']],
+					['Français', ['fr-FR']],
+					['Galego', ['gl-ES']],
+					['Hrvatski', ['hr_HR']],
+					['IsiZulu', ['zu-ZA']],
+					['Íslenska', ['is-IS']],
+					['Italiano', ['it-IT', 'Italia'],
+						['it-CH', 'Svizzera']],
+					['Magyar', ['hu-HU']],
+					['Nederlands', ['nl-NL']],
+					['Norsk bokmål', ['nb-NO']],
+					['Polski', ['pl-PL']],
+					['Português', ['pt-BR', 'Brasil'],
+						['pt-PT', 'Portugal']],
+					['Română', ['ro-RO']],
+					['Slovenčina', ['sk-SK']],
+					['Suomi', ['fi-FI']],
+					['Svenska', ['sv-SE']],
+					['Türkçe', ['tr-TR']],
+					['български', ['bg-BG']],
+					['Pусский', ['ru-RU']],
+					['Српски', ['sr-RS']],
+					['한국어', ['ko-KR']],
+					['中文', ['cmn-Hans-CN', '普通话 (中国大陆)'],
+						['cmn-Hans-HK', '普通话 (香港)'],
+						['cmn-Hant-TW', '中文 (台灣)'],
+						['yue-Hant-HK', '粵語 (香港)']],
+					['日本語', ['ja-JP']],
+					['Lingua latīna', ['la']]];
+
+				for (var i = 0; i < langs.length; i++) {
+					select_language.options[i] = new Option(langs[i][0], i);
+				}
+				select_language.selectedIndex = 6;
+				updateCountry();
+				select_dialect.selectedIndex = 6;
+				showInfo('info_start');
+
+				function updateCountry() {
+					for (var i = select_dialect.options.length - 1; i >= 0; i--) {
+						select_dialect.remove(i);
+					}
+					var list = langs[select_language.selectedIndex];
+					for (var i = 1; i < list.length; i++) {
+						select_dialect.options.add(new Option(list[i][1], list[i][0]));
+					}
+					select_dialect.style.visibility = list[1].length == 1 ? 'hidden' : 'visible';
+				}
+
+				var create_email = false;
+				var final_transcript = '';
+				var recognizing = false;
+				var ignore_onend;
+				var start_timestamp;
+				if (!('webkitSpeechRecognition' in window)) {
+					upgrade();
+				} else {
+					start_button.style.display = 'inline-block';
+					var recognition = new webkitSpeechRecognition();
+					recognition.continuous = true;
+					recognition.interimResults = true;
+
+					recognition.onstart = function () {
+						recognizing = true;
+						showInfo('info_speak_now');
+						start_img.src = 'mic-animate.gif';
+					};
+
+					recognition.onerror = function (event) {
+						if (event.error == 'no-speech') {
+							start_img.src = 'mic.gif';
+							showInfo('info_no_speech');
+							ignore_onend = true;
+						}
+						if (event.error == 'audio-capture') {
+							start_img.src = 'mic.gif';
+							showInfo('info_no_microphone');
+							ignore_onend = true;
+						}
+						if (event.error == 'not-allowed') {
+							if (event.timeStamp - start_timestamp < 100) {
+								showInfo('info_blocked');
+							} else {
+								showInfo('info_denied');
+							}
+							ignore_onend = true;
+						}
+					};
+
+					recognition.onend = function () {
+						recognizing = false;
+						if (ignore_onend) {
+							return;
+						}
+						start_img.src = 'mic.gif';
+						if (!final_transcript) {
+							showInfo('info_start');
+							return;
+						}
+						showInfo('');
+						if (window.getSelection) {
+							window.getSelection().removeAllRanges();
+							var range = document.createRange();
+							range.selectNode(document.getElementById('final_span'));
+							window.getSelection().addRange(range);
+						}
+						if (create_email) {
+							create_email = false;
+							createEmail();
+						}
+					};
+
+					recognition.onresult = function (event) {
+						var interim_transcript = '';
+						for (var i = event.resultIndex; i < event.results.length; ++i) {
+							if (event.results[i].isFinal) {
+								final_transcript += event.results[i][0].transcript;
+							} else {
+								interim_transcript += event.results[i][0].transcript;
+								if (interim_transcript.includes("open barcode")) {
+									window.location.href = "./barcode.html";
+								}
+								if (interim_transcript.includes("open product details")) {
+									window.location.href = "./product details.html";
+								}
+							}
+						}
+						final_transcript = capitalize(final_transcript);
+						final_span.innerHTML = linebreak(final_transcript);
+						interim_span.innerHTML = linebreak(interim_transcript);
+						if (final_transcript || interim_transcript) {
+							showButtons('inline-block');
+						}
+					};
+				}
+
+				function upgrade() {
+					start_button.style.visibility = 'hidden';
+					showInfo('info_upgrade');
+				}
+
+				var two_line = /\n\n/g;
+				var one_line = /\n/g;
+				function linebreak(s) {
+					return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
+				}
+
+				var first_char = /\S/;
+				function capitalize(s) {
+					return s.replace(first_char, function (m) { return m.toUpperCase(); });
+				}
+
+				function createEmail() {
+					var n = final_transcript.indexOf('\n');
+					if (n < 0 || n >= 80) {
+						n = 40 + final_transcript.substring(40).indexOf(' ');
+					}
+					var subject = encodeURI(final_transcript.substring(0, n));
+					var body = encodeURI(final_transcript.substring(n + 1));
+					window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+				}
+
+				function copyButton() {
+					if (recognizing) {
+						recognizing = false;
+						recognition.stop();
+					}
+					copy_button.style.display = 'none';
+					copy_info.style.display = 'inline-block';
+					showInfo('');
+				}
+
+				function emailButton() {
+					if (recognizing) {
+						create_email = true;
+						recognizing = false;
+						recognition.stop();
+					} else {
+						createEmail();
+					}
+					email_button.style.display = 'none';
+					email_info.style.display = 'inline-block';
+					showInfo('');
+				}
+
+				function startButton(event) {
+					if (recognizing) {
+						recognition.stop();
+						return;
+					}
+					final_transcript = '';
+					recognition.lang = select_dialect.value;
+					recognition.start();
+					ignore_onend = false;
+					final_span.innerHTML = '';
+					interim_span.innerHTML = '';
+					start_img.src = 'mic-slash.gif';
+					showInfo('info_allow');
+					showButtons('none');
+					start_timestamp = event.timeStamp;
+				}
+
+				function showInfo(s) {
+					if (s) {
+						for (var child = info.firstChild; child; child = child.nextSibling) {
+							if (child.style) {
+								child.style.display = child.id == s ? 'inline' : 'none';
+							}
+						}
+						info.style.visibility = 'visible';
+					} else {
+						info.style.visibility = 'hidden';
+					}
+				}
+
+				var current_style;
+				function showButtons(style) {
+					if (style == current_style) {
+						return;
+					}
+					current_style = style;
+					copy_button.style.display = style;
+					email_button.style.display = style;
+					copy_info.style.display = 'none';
+					email_info.style.display = 'none';
+				}
+				final_transcript = '';
+				recognition.lang = select_dialect.value;
+				recognition.start();
+				ignore_onend = false;
+				final_span.innerHTML = '';
+				interim_span.innerHTML = '';
+				start_img.src = 'mic-slash.gif';
+				showInfo('info_allow');
+				showButtons('none');
+				start_timestamp = event.timeStamp;
+
+			</script>
+			<div class="features">
+				<div class="feature">
+					<i class="fa fa-diamond"></i>
+					<h3>Barcode Buzzer</h3>
+					<p>Sed tempus feugiat adipiscing nisl cursus aliquam dolore.</p>
+				</div>
+				<div class="feature">
+					<i class="fa fa-copy"></i>
+					<h3>Speech to Text</h3>
+					<p>Sed tempus feugiat adipiscing nisl cursus aliquam dolore.</p>
+				</div>
+				<div class="feature">
+					<i class="fa fa-paper-plane-o"></i>
+					<h3>Feugiat nullam</h3>
+					<p>Sed tempus feugiat adipiscing nisl cursus aliquam dolore.</p>
+				</div>
+				<!-- <div class="feature">
+							<i class="fa fa-save"></i>
+							<h3>Amet imperdiet</h3>
+							<p>Sed tempus feugiat adipiscing nisl cursus aliquam dolore.</p>
+						</div>
+						<div class="feature">
+							<i class="fa fa-envelope-o"></i>
+							<h3>Tempus lorem</h3>
+							<p>Sed tempus feugiat adipiscing nisl cursus aliquam dolore.</p>
+						</div> -->
+			</div>
+		</div>
+	</section>
+
+	<!-- Two -->
+	<section id="two" class="wrapper style2 special">
+		<div class="inner narrow">
+			<header>
+				<h2>Get in touch</h2>
+			</header>
+			<form class="grid-form" method="post" action="#">
+				<div class="form-control narrow">
+					<label for="name">Name</label>
+					<input name="name" id="name" type="text">
+				</div>
+				<div class="form-control narrow">
+					<label for="email">Email</label>
+					<input name="email" id="email" type="email">
+				</div>
+				<div class="form-control">
+					<label for="message">Message</label>
+					<textarea name="message" id="message" rows="4"></textarea>
+				</div>
+				<ul class="actions">
+					<li><input value="Send Message" type="submit"></li>
+				</ul>
+			</form>
+		</div>
+	</section>
+
+	<!-- Three -->
+	<!--
+			<section id="three" class="wrapper">
+				<div class="inner">
+
+					<h2 id="content">Sample Content</h2>
+					<p>Praesent ac adipiscing ullamcorper semper ut amet ac risus. Lorem sapien ut odio odio nunc. Ac adipiscing nibh porttitor erat risus justo adipiscing adipiscing amet placerat accumsan. Vis. Faucibus odio magna tempus adipiscing a non. In mi primis arcu ut non accumsan vivamus ac blandit adipiscing adipiscing arcu metus praesent turpis eu ac lacinia nunc ac commodo gravida adipiscing eget accumsan ac nunc adipiscing adipiscing.</p>
+					<div class="row">
+						<div class="6u 12u$(small)">
+							<h3>Sem turpis amet semper</h3>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat commodo eu sed ante lacinia. Sapien a lorem in integer ornare praesent commodo adipiscing arcu in massa commodo lorem accumsan at odio massa ac ac. Semper adipiscing varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+						</div>
+						<div class="6u$ 12u$(small)">
+							<h3>Magna odio tempus commodo</h3>
+							<p>In arcu accumsan arcu adipiscing accumsan orci ac. Felis id enim aliquet. Accumsan ac integer lobortis commodo ornare aliquet accumsan erat tempus amet porttitor. Ante commodo blandit adipiscing integer semper orci eget. Faucibus commodo adipiscing mi eu nullam accumsan morbi arcu ornare odio mi adipiscing nascetur lacus ac interdum morbi accumsan vis mi accumsan ac praesent.</p>
+						</div>
+						<div class="4u 12u$(medium)">
+							<h3>Interdum sapien gravida</h3>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+						</div>
+						<div class="4u 12u$(medium)">
+							<h3>Faucibus consequat lorem</h3>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+						</div>
+						<div class="4u$ 12u$(medium)">
+							<h3>Accumsan montes viverra</h3>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+						</div>
+					</div>
+
+					<hr class="major" />
+
+					<h2 id="elements">Elements</h2>
+					<div class="row 200%">
+						<div class="6u 12u$(medium)">
+
+							<h3>Text</h3>
+							<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
+							This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
+							This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>.
+							Finally, this is a <a href="#">link</a>.</p>
+							<hr />
+							<h2>Heading Level 2</h2>
+							<h3>Heading Level 3</h3>
+							<h4>Heading Level 4</h4>
+							<h5>Heading Level 5</h5>
+							<h6>Heading Level 6</h6>
+							<hr />
+							<header>
+								<h2>Heading with a Subtitle</h2>
+								<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
+							</header>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+							<header>
+								<h3>Heading with a Subtitle</h3>
+								<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
+							</header>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+							<header>
+								<h4>Heading with a Subtitle</h4>
+								<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
+							</header>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+
+							<h3>Lists</h3>
+							<div class="row">
+								<div class="6u 12u$(small)">
+
+									<h4>Unordered</h4>
+									<ul>
+										<li>Dolor pulvinar etiam magna etiam.</li>
+										<li>Sagittis adipiscing lorem eleifend.</li>
+										<li>Felis enim feugiat dolore viverra.</li>
+									</ul>
+
+									<h4>Alternate</h4>
+									<ul class="alt">
+										<li>Dolor pulvinar etiam magna etiam.</li>
+										<li>Sagittis adipiscing lorem eleifend.</li>
+										<li>Felis enim feugiat dolore viverra.</li>
+									</ul>
+
+								</div>
+								<div class="6u$ 12u$(small)">
+
+									<h4>Ordered</h4>
+									<ol>
+										<li>Dolor pulvinar etiam magna etiam.</li>
+										<li>Etiam vel felis at lorem sed viverra.</li>
+										<li>Felis enim feugiat dolore viverra.</li>
+										<li>Dolor pulvinar etiam magna etiam.</li>
+										<li>Etiam vel felis at lorem sed viverra.</li>
+										<li>Felis enim feugiat dolore viverra.</li>
+									</ol>
+
+									<h4>Icons</h4>
+									<ul class="icons">
+										<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon fa-github"><span class="label">Github</span></a></li>
+										<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+										<li><a href="#" class="icon fa-tumblr"><span class="label">Tumblr</span></a></li>
+									</ul>
+
+								</div>
+							</div>
+							<h4>Definition</h4>
+							<dl>
+								<dt>Item 1</dt>
+								<dd>
+									<p>Lorem ipsum dolor vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent.</p>
+								</dd>
+								<dt>Item 2</dt>
+								<dd>
+									<p>Lorem ipsum dolor vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent.</p>
+								</dd>
+								<dt>Item 3</dt>
+								<dd>
+									<p>Lorem ipsum dolor vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent.</p>
+								</dd>
+							</dl>
+
+							<h4>Actions</h4>
+							<ul class="actions">
+								<li><a href="#" class="button special">Default</a></li>
+								<li><a href="#" class="button">Default</a></li>
+								<li><a href="#" class="button alt">Default</a></li>
+							</ul>
+							<ul class="actions small">
+								<li><a href="#" class="button special small">Small</a></li>
+								<li><a href="#" class="button small">Small</a></li>
+								<li><a href="#" class="button alt small">Small</a></li>
+							</ul>
+							<div class="row">
+								<div class="3u 12u$(small)">
+									<ul class="actions vertical">
+										<li><a href="#" class="button special">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+										<li><a href="#" class="button alt">Default</a></li>
+									</ul>
+								</div>
+								<div class="3u 12u$(small)">
+									<ul class="actions vertical small">
+										<li><a href="#" class="button special small">Small</a></li>
+										<li><a href="#" class="button small">Small</a></li>
+										<li><a href="#" class="button alt small">Small</a></li>
+									</ul>
+								</div>
+								<div class="3u 12u$(small)">
+									<ul class="actions vertical">
+										<li><a href="#" class="button special fit">Default</a></li>
+										<li><a href="#" class="button fit">Default</a></li>
+										<li><a href="#" class="button alt fit">Default</a></li>
+									</ul>
+								</div>
+								<div class="3u$ 12u$(small)">
+									<ul class="actions vertical small">
+										<li><a href="#" class="button special small fit">Small</a></li>
+										<li><a href="#" class="button small fit">Small</a></li>
+										<li><a href="#" class="button alt small fit">Small</a></li>
+									</ul>
+								</div>
+							</div>
+
+							<h3>Blockquote</h3>
+							<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis.</blockquote>
+
+							<h3>Table</h3>
+							<h4>Default</h4>
+							<div class="table-wrapper">
+								<table>
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Description</th>
+											<th>Price</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Item 1</td>
+											<td>Ante turpis integer aliquet porttitor.</td>
+											<td>29.99</td>
+										</tr>
+										<tr>
+											<td>Item 2</td>
+											<td>Vis ac commodo adipiscing arcu aliquet.</td>
+											<td>19.99</td>
+										</tr>
+										<tr>
+											<td>Item 3</td>
+											<td> Morbi faucibus arcu accumsan lorem.</td>
+											<td>29.99</td>
+										</tr>
+										<tr>
+											<td>Item 4</td>
+											<td>Vitae integer tempus condimentum.</td>
+											<td>19.99</td>
+										</tr>
+										<tr>
+											<td>Item 5</td>
+											<td>Ante turpis integer aliquet porttitor.</td>
+											<td>29.99</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="2"></td>
+											<td>100.00</td>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+
+							<h4>Alternate</h4>
+							<div class="table-wrapper">
+								<table class="alt">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Description</th>
+											<th>Price</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Item 1</td>
+											<td>Ante turpis integer aliquet porttitor.</td>
+											<td>29.99</td>
+										</tr>
+										<tr>
+											<td>Item 2</td>
+											<td>Vis ac commodo adipiscing arcu aliquet.</td>
+											<td>19.99</td>
+										</tr>
+										<tr>
+											<td>Item 3</td>
+											<td> Morbi faucibus arcu accumsan lorem.</td>
+											<td>29.99</td>
+										</tr>
+										<tr>
+											<td>Item 4</td>
+											<td>Vitae integer tempus condimentum.</td>
+											<td>19.99</td>
+										</tr>
+										<tr>
+											<td>Item 5</td>
+											<td>Ante turpis integer aliquet porttitor.</td>
+											<td>29.99</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="2"></td>
+											<td>100.00</td>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+
+						</div>
+						<div class="6u$ 12u$(medium)">
+
+							<h3>Buttons</h3>
+							<ul class="actions">
+								<li><a href="#" class="button special">Special</a></li>
+								<li><a href="#" class="button">Default</a></li>
+								<li><a href="#" class="button alt">Alternate</a></li>
+							</ul>
+							<ul class="actions">
+								<li><a href="#" class="button special big">Big</a></li>
+								<li><a href="#" class="button">Default</a></li>
+								<li><a href="#" class="button alt small">Small</a></li>
+							</ul>
+							<ul class="actions fit">
+								<li><a href="#" class="button special fit">Fit</a></li>
+								<li><a href="#" class="button fit">Fit</a></li>
+								<li><a href="#" class="button alt fit">Fit</a></li>
+							</ul>
+							<ul class="actions fit small">
+								<li><a href="#" class="button special fit small">Fit + Small</a></li>
+								<li><a href="#" class="button fit small">Fit + Small</a></li>
+								<li><a href="#" class="button alt fit small">Fit + Small</a></li>
+							</ul>
+							<ul class="actions">
+								<li><a href="#" class="button special icon fa-search">Icon</a></li>
+								<li><a href="#" class="button icon fa-download">Icon</a></li>
+								<li><a href="#" class="button alt icon fa-check">Icon</a></li>
+							</ul>
+							<ul class="actions">
+								<li><span class="button special disabled">Special</span></li>
+								<li><span class="button disabled">Default</span></li>
+								<li><span class="button alt disabled">Alternate</span></li>
+							</ul>
+
+							<h3>Form</h3>
+							<form method="post" action="#">
+								<div class="row uniform">
+									<div class="6u 12u$(xsmall)">
+										<input type="text" name="name" id="name" value="" placeholder="Name" />
+									</div>
+									<div class="6u$ 12u$(xsmall)">
+										<input type="email" name="email" id="email" value="" placeholder="Email" />
+									</div>
+									<div class="12u$">
+										<div class="select-wrapper">
+											<select name="category" id="category">
+												<option value="">- Category -</option>
+												<option value="1">Manufacturing</option>
+												<option value="1">Shipping</option>
+												<option value="1">Administration</option>
+												<option value="1">Human Resources</option>
+											</select>
+										</div>
+									</div>
+									<div class="4u 12u$(small)">
+										<input type="radio" id="priority-low" name="priority" checked>
+										<label for="priority-low">Low Priority</label>
+									</div>
+									<div class="4u 12u$(small)">
+										<input type="radio" id="priority-normal" name="priority">
+										<label for="priority-normal">Normal Priority</label>
+									</div>
+									<div class="4u$ 12u$(small)">
+										<input type="radio" id="priority-high" name="priority">
+										<label for="priority-high">High Priority</label>
+									</div>
+									<div class="6u 12u$(small)">
+										<input type="checkbox" id="copy" name="copy">
+										<label for="copy">Email me a copy of this message</label>
+									</div>
+									<div class="6u$ 12u$(small)">
+										<input type="checkbox" id="human" name="human" checked>
+										<label for="human">I am a human and not a robot</label>
+									</div>
+									<div class="12u$">
+										<textarea name="message" id="message" placeholder="Enter your message" rows="6"></textarea>
+									</div>
+									<div class="12u$">
+										<ul class="actions">
+											<li><input type="submit" value="Send Message" /></li>
+											<li><input type="reset" value="Reset" class="alt" /></li>
+										</ul>
+									</div>
+								</div>
+							</form>
+
+							<hr />
+
+							<form method="post" action="#">
+								<div class="row uniform">
+									<div class="9u 12u$(small)">
+										<input type="text" name="query" id="query" value="" placeholder="Query" />
+									</div>
+									<div class="3u$ 12u$(small)">
+										<input type="submit" value="Search" class="fit" />
+									</div>
+								</div>
+							</form>
+
+							<h3>Image</h3>
+							<h4>Fit</h4>
+							<span class="image fit"><img src="images/pic01.jpg" alt="" /></span>
+							<div class="box alt">
+								<div class="row 50% uniform">
+									<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+									<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+									<div class="4u$"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+									<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+									<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+									<div class="4u$"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+									<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+									<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+									<div class="4u$"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+								</div>
+							</div>
+
+							<h4>Left &amp; Right</h4>
+							<p><span class="image left"><img src="images/pic02.jpg" alt="" /></span>Lorem ipsum dolor sit accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Vestibulum ante ipsum primis in faucibus magna blandit adipiscing eu felis iaculis volutpat lorem ipsum dolor sit amet dolor consequat.</p>
+							<p><span class="image right"><img src="images/pic02.jpg" alt="" /></span>Lorem ipsum dolor sit accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Vestibulum ante ipsum primis in faucibus magna blandit adipiscing eu felis iaculis volutpat lorem ipsum dolor sit amet dolor consequat.</p>
+
+							<h3>Box</h3>
+							<div class="box">
+								<p>Felis sagittis eget tempus primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Magna sed etiam ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus lorem ipsum dolor sit amet nullam.</p>
+							</div>
+
+							<h3>Preformatted</h3>
+							<pre><code>i = 0;
+
+while (!deck.isInOrder()) {
+    print 'Iteration ' + i;
+    deck.shuffle();
+    i++;
+}
+
+print 'It took ' + i + ' iterations to sort the deck.';
+</code></pre>
+
+						</div>
+					</div>
+
+				</div>
+			</section>
+		-->
+
+	<!-- Footer -->
+	<footer id="footer">
+		<div class="copyright">
+			&copy; Untitled. Design: <a href="http://templated.co/">TEMPLATED</a>.
+		</div>
+	</footer>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/skel.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+	<script src="assets/js/main.js"></script>
+
+</body>
+
 </html>
