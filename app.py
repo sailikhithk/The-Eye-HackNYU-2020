@@ -20,7 +20,7 @@ result_bucket = storage_client.bucket('ocr_results_bucket')
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template("barcode.html")
+    return render_template("index.html")
 
 @app.route('/uploadajax', methods=['POST'])
 def user_update_avatar():
