@@ -9,6 +9,8 @@
 Application to help visually challenged people. Imagine, how difficult is day to day life for visually challenged people, despite their physical challenges they manage to succeed in their own ways, so we decided to do some special web application for such people which would make their lives better.
 
 ![Project](/images/Hacknyu.png)
+![Demo](/images/Part1.png)
+![Demo](/images/Part2.png)
 
 We as a team of 4 people namely Harshul (hj1393@nyu.edu), Tanya (ts3813@nyu.edu) , Darren (darrenzhang200027@gmail.com, Sai Likhith Kanuparthi (slk522@nyu.edu), worked hard for almost 36 hours at streak for developing a web application using the technologies like computer vision, natural language processing and server-less computing.
 
